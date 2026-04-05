@@ -8,7 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "ClientPortal - Premium Client Portal Builder for Freelancers & Agencies",
+  title: "ClientPortal \u2014 Client Portal for Freelancers & Agencies",
   description:
     "Create branded client portals to share files, messages, and project updates. Give your clients a premium experience they will love.",
   keywords: [
@@ -31,12 +31,14 @@ export const metadata: Metadata = {
     siteName: "ClientPortal",
     locale: "en_US",
     type: "website",
+    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "ClientPortal - Premium Client Portal Builder",
     description:
       "Create branded client portals to share files, messages, and project updates.",
+    images: ['/opengraph-image'],
   },
 };
 
