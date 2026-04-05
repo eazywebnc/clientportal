@@ -31,14 +31,14 @@ export const metadata: Metadata = {
     siteName: "ClientPortal",
     locale: "en_US",
     type: "website",
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'ClientPortal — Premium Client Portal Builder' }],
+    images: [{ url: '/images/og-image.webp', width: 1200, height: 630, type: 'image/webp', alt: 'ClientPortal — Premium Client Portal Builder' }],
   },
   twitter: {
     card: "summary_large_image",
     title: "ClientPortal - Premium Client Portal Builder",
     description:
       "Create branded client portals to share files, messages, and project updates.",
-    images: ['/og-image.png'],
+    images: ['/images/og-image.webp'],
   },
 };
 
