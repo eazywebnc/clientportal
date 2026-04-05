@@ -8,14 +8,11 @@ const footerLinks = {
     { label: "How It Works", href: "#how-it-works" },
   ],
   Company: [
-    { label: "About", href: "#" },
-    { label: "Blog", href: "#" },
     { label: "Contact", href: "mailto:contact@eazyweb.nc" },
   ],
   Legal: [
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
-    { label: "Cookie Policy", href: "#" },
   ],
 };
 

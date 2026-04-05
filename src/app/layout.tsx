@@ -19,6 +19,9 @@ export const metadata: Metadata = {
     "file sharing",
     "client communication",
   ],
+  alternates: {
+    canonical: 'https://clientportal.eazyweb.nc',
+  },
   metadataBase: new URL("https://clientportal.eazyweb.nc"),
   openGraph: {
     title: "ClientPortal - Premium Client Portal Builder",
