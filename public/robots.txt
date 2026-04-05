@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://clientportal.eazyweb.nc/sitemap.xml
