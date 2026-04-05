@@ -20,10 +20,10 @@ export function AnimatedMeshBg() {
     resize();
     window.addEventListener("resize", resize);
     const orbs: Orb[] = [
-      { x: 0.2, y: 0.3, vx: 0.0003, vy: 0.0002, r: 0.35, color: "rgba(59,130,246,0.12)" },
-      { x: 0.7, y: 0.2, vx: -0.0002, vy: 0.0003, r: 0.3, color: "rgba(6,182,212,0.10)" },
-      { x: 0.5, y: 0.7, vx: 0.0001, vy: -0.0002, r: 0.4, color: "rgba(37,99,235,0.08)" },
-      { x: 0.3, y: 0.8, vx: 0.0002, vy: 0.0001, r: 0.25, color: "rgba(96,165,250,0.10)" },
+      { x: 0.2, y: 0.3, vx: 0.0003, vy: 0.0002, r: 0.35, color: "rgba(99,102,241,0.12)" },
+      { x: 0.7, y: 0.2, vx: -0.0002, vy: 0.0003, r: 0.3, color: "rgba(79,70,229,0.10)" },
+      { x: 0.5, y: 0.7, vx: 0.0001, vy: -0.0002, r: 0.4, color: "rgba(67,56,202,0.08)" },
+      { x: 0.3, y: 0.8, vx: 0.0002, vy: 0.0001, r: 0.25, color: "rgba(148,163,184,0.07)" },
     ];
     function draw() {
       if (!ctx || !canvas) return;
