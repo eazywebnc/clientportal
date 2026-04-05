@@ -1,64 +1,67 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Layers, Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 
-function LoginForm() {
-  const searchParams = useSearchParams();
-  const [isLogin, setIsLogin] = useState(searchParams.get("mode") !== "signup");
+export default function LoginPage() {
+  const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const supabase = createClient();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
     setError(null);
     setMessage(null);
 
-    if (isLogin) {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) {
-        setError(error.message);
+    startTransition(async () => {
+      if (mode === "login") {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) {
+          setError(error.message);
+          return;
+        }
+        router.push("/dashboard");
+        router.refresh();
       } else {
-        window.location.href = "/dashboard";
-      }
-    } else {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      if (error) {
-        setError(error.message);
-      } else {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+          },
+        });
+        if (error) {
+          setError(error.message);
+          return;
+        }
         setMessage("Check your email for the confirmation link.");
       }
-    }
-    setLoading(false);
+    });
   }
 
   async function handleGoogleLogin() {
-    await supabase.auth.signInWithOAuth({
+    setError(null);
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
+    if (error) setError(error.message);
   }
 
   return (
@@ -87,10 +90,10 @@ function LoginForm() {
         <div className="rounded-2xl border border-white/5 bg-[#111111] p-8">
           <div className="text-center mb-6">
             <h1 className="text-2xl font-bold text-white mb-2">
-              {isLogin ? "Welcome Back" : "Create Your Account"}
+              {mode === "login" ? "Welcome Back" : "Create Your Account"}
             </h1>
             <p className="text-sm text-zinc-400">
-              {isLogin
+              {mode === "login"
                 ? "Sign in to access your portals"
                 : "Start building premium client portals"}
             </p>
@@ -99,7 +102,8 @@ function LoginForm() {
           {/* Google OAuth */}
           <button
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-3 h-11 rounded-lg border border-white/10 bg-white/5 text-sm text-white hover:bg-white/10 transition-colors mb-6 cursor-pointer"
+            disabled={isPending}
+            className="w-full flex items-center justify-center gap-3 h-11 rounded-lg border border-white/10 bg-white/5 text-sm text-white hover:bg-white/10 transition-colors mb-6 cursor-pointer disabled:opacity-50"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -175,12 +179,17 @@ function LoginForm() {
               </p>
             )}
 
-            <Button type="submit" className="w-full" size="lg" disabled={loading}>
-              {loading ? (
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              disabled={isPending || !email || !password}
+            >
+              {isPending ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
                 <>
-                  {isLogin ? "Sign In" : "Create Account"}
+                  {mode === "login" ? "Sign In" : "Create Account"}
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
@@ -188,28 +197,38 @@ function LoginForm() {
           </form>
 
           <p className="mt-6 text-center text-sm text-zinc-500">
-            {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-            <button
-              onClick={() => {
-                setIsLogin(!isLogin);
-                setError(null);
-                setMessage(null);
-              }}
-              className="text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer"
-            >
-              {isLogin ? "Sign Up" : "Sign In"}
-            </button>
+            {mode === "login" ? (
+              <>
+                Don&apos;t have an account?{" "}
+                <button
+                  onClick={() => {
+                    setMode("signup");
+                    setError(null);
+                    setMessage(null);
+                  }}
+                  className="text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer"
+                >
+                  Sign Up
+                </button>
+              </>
+            ) : (
+              <>
+                Already have an account?{" "}
+                <button
+                  onClick={() => {
+                    setMode("login");
+                    setError(null);
+                    setMessage(null);
+                  }}
+                  className="text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer"
+                >
+                  Sign In
+                </button>
+              </>
+            )}
           </p>
         </div>
       </motion.div>
     </div>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>}>
-      <LoginForm />
-    </Suspense>
   );
 }
