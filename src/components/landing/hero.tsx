@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useEffect } from "react";
 import gsap from "gsap";
@@ -130,7 +131,7 @@ function PortalMockup() {
   return (
     <div
       ref={mockupRef}
-      className="relative w-full rounded-2xl border border-white/[0.08] bg-[#0c0c14]/80 overflow-hidden shadow-2xl shadow-indigo-500/10 backdrop-blur-xl"
+      className="relative w-full rounded-2xl border border-white/[0.08] bg-[#0c0c14]/80 overflow-hidden shadow-2xl shadow-blue-500/10 backdrop-blur-xl"
       style={{ willChange: "transform" }}
     >
       {/* Top bar */}
@@ -157,11 +158,11 @@ function PortalMockup() {
           className="col-span-3 border-r border-white/[0.06] p-3 space-y-1"
           style={{ willChange: "transform" }}
         >
-          <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/15">
-            <div className="w-5 h-5 rounded-md bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center">
+          <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/15">
+            <div className="w-5 h-5 rounded-md bg-gradient-to-br from-blue-500 to-sky-500 flex items-center justify-center">
               <span className="text-[9px] font-bold text-white">A</span>
             </div>
-            <span className="text-[11px] text-indigo-300 font-medium">Acme Corp</span>
+            <span className="text-[11px] text-blue-300 font-medium">Acme Corp</span>
           </div>
           {[
             { icon: FolderOpen, label: "Files", active: true },
@@ -181,7 +182,7 @@ function PortalMockup() {
               <item.icon className="w-3.5 h-3.5" />
               <span className="flex-1">{item.label}</span>
               {item.badge && (
-                <span className="px-1.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 text-[9px] font-medium">
+                <span className="px-1.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 text-[9px] font-medium">
                   {item.badge}
                 </span>
               )}
@@ -219,7 +220,7 @@ function PortalMockup() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.6, type: "spring" }}
-              className="px-2.5 py-1 rounded-lg bg-indigo-500/15 border border-indigo-500/20 text-[10px] text-indigo-400 font-medium"
+              className="px-2.5 py-1 rounded-lg bg-blue-500/15 border border-blue-500/20 text-[10px] text-blue-400 font-medium"
             >
               + Upload
             </motion.div>
@@ -290,13 +291,13 @@ function FloatingBadges() {
         initial={{ opacity: 0, x: 40, y: 20 }}
         animate={{ opacity: 1, x: 0, y: 0 }}
         transition={{ delay: 1.5, type: "spring", stiffness: 120 }}
-        className="absolute -right-4 top-20 z-20 hidden lg:flex items-center gap-2 px-3 py-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 backdrop-blur-lg shadow-lg"
+        className="absolute -right-4 top-20 z-20 hidden lg:flex items-center gap-2 px-3 py-2 rounded-xl bg-blue-500/10 border border-blue-500/20 backdrop-blur-lg shadow-lg"
       >
-        <div className="w-6 h-6 rounded-full bg-indigo-500/20 flex items-center justify-center">
-          <MessageSquare className="w-3 h-3 text-indigo-400" />
+        <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center">
+          <MessageSquare className="w-3 h-3 text-blue-400" />
         </div>
         <div>
-          <p className="text-[10px] font-medium text-indigo-300">New Message</p>
+          <p className="text-[10px] font-medium text-blue-300">New Message</p>
           <p className="text-[9px] text-zinc-500">Sarah left feedback</p>
         </div>
       </motion.div>
@@ -332,6 +333,7 @@ export function Hero() {
   });
   const mockupY = useTransform(scrollYProgress, [0, 1], [0, 100]);
   const mockupScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  const dashboardParallaxY = useTransform(scrollYProgress, [0, 1], [0, -40]);
 
   return (
     <section
@@ -340,17 +342,17 @@ export function Hero() {
     >
       {/* Background */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-indigo-600/12 rounded-full blur-[140px]" />
-        <div className="absolute bottom-1/3 left-1/4 w-[400px] h-[400px] bg-blue-600/8 rounded-full blur-[100px]" />
-        <div className="absolute top-1/3 right-1/4 w-[300px] h-[300px] bg-violet-600/8 rounded-full blur-[80px]" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-blue-600/10 rounded-full blur-[140px]" />
+        <div className="absolute bottom-1/3 left-1/4 w-[400px] h-[400px] bg-sky-600/8 rounded-full blur-[100px]" />
+        <div className="absolute top-1/3 right-1/4 w-[300px] h-[300px] bg-slate-500/8 rounded-full blur-[80px]" />
       </div>
 
       {/* Dot grid */}
       <div
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0"
         style={{
-          backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px)`,
-          backgroundSize: "32px 32px",
+          backgroundImage: `radial-gradient(circle, rgba(99,102,241,0.15) 1px, transparent 1px)`,
+          backgroundSize: "24px 24px",
         }}
       />
 
@@ -361,10 +363,10 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-8"
           >
-            <Sparkles className="w-4 h-4 text-indigo-400" />
-            <span className="text-sm text-indigo-300">
+            <Sparkles className="w-4 h-4 text-sky-400" />
+            <span className="text-sm text-blue-300">
               The #1 Client Portal Builder
             </span>
           </motion.div>
@@ -377,7 +379,7 @@ export function Hero() {
           >
             <span className="text-white">Give Your Clients a</span>
             <br />
-            <span className="bg-gradient-to-r from-indigo-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-400 via-sky-400 to-cyan-400 bg-clip-text text-transparent">
               Premium Experience
             </span>
           </motion.h1>
@@ -424,7 +426,7 @@ export function Hero() {
               { value: "4.9/5", label: "User Rating" },
             ].map((stat) => (
               <div key={stat.label}>
-                <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
+                <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                   {stat.value}
                 </div>
                 <div className="text-xs sm:text-sm text-zinc-500 mt-1">
@@ -446,8 +448,48 @@ export function Hero() {
           <FloatingBadges />
           <PortalMockup />
 
+          {/* Real dashboard preview */}
+          <motion.div
+            style={{ y: dashboardParallaxY }}
+            className="mt-8 relative rounded-2xl overflow-hidden border border-white/[0.08] shadow-2xl shadow-blue-500/10"
+          >
+            {/* Browser frame */}
+            <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06] bg-[#0c0c14]/90">
+              <div className="flex gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-red-500/60" />
+                <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
+                <div className="w-3 h-3 rounded-full bg-green-500/60" />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <div className="px-4 py-1 rounded-lg bg-white/[0.04] border border-white/[0.06] text-[11px] text-zinc-500 flex items-center gap-1.5">
+                  <Lock className="w-3 h-3" />
+                  app.clientportal.io/dashboard
+                </div>
+              </div>
+              <div className="w-16" />
+            </div>
+            <div style={{ perspective: "1200px" }}>
+              <motion.div
+                initial={{ rotateX: 4, scale: 0.98 }}
+                whileInView={{ rotateX: 0, scale: 1 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                viewport={{ once: true }}
+                style={{ transformOrigin: "center top" }}
+              >
+                <Image
+                  src="/images/dashboard.webp"
+                  alt="ClientPortal dashboard preview"
+                  width={1920}
+                  height={1080}
+                  className="w-full h-auto"
+                  priority={false}
+                />
+              </motion.div>
+            </div>
+          </motion.div>
+
           {/* Bottom glow */}
-          <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-3/4 h-16 bg-indigo-500/20 blur-[60px] rounded-full" />
+          <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-3/4 h-16 bg-blue-500/20 blur-[60px] rounded-full" />
         </motion.div>
       </div>
     </section>
