@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight,
   Sparkles,
@@ -16,6 +18,8 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+gsap.registerPlugin(ScrollTrigger);
 
 /* ------------------------------------------------------------------ */
 /*  Animated Portal Dashboard Mockup                                   */
@@ -34,8 +38,101 @@ const activities = [
 ];
 
 function PortalMockup() {
+  const mockupRef = useRef<HTMLDivElement>(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const fileListRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      /* --- Card-stack unfold effect on the whole mockup --- */
+      gsap.fromTo(
+        mockupRef.current,
+        {
+          rotateX: 8,
+          rotateY: -3,
+          scale: 0.94,
+          transformPerspective: 1200,
+          transformOrigin: "center bottom",
+        },
+        {
+          rotateX: 0,
+          rotateY: 0,
+          scale: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: mockupRef.current,
+            start: "top 85%",
+            end: "top 30%",
+            scrub: 1,
+          },
+        }
+      );
+
+      /* --- Depth parallax: sidebar moves slower than main content --- */
+      if (sidebarRef.current && contentRef.current) {
+        gsap.to(sidebarRef.current, {
+          y: -20,
+          ease: "none",
+          scrollTrigger: {
+            trigger: mockupRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            scrub: 1,
+          },
+        });
+
+        gsap.to(contentRef.current, {
+          y: -40,
+          ease: "none",
+          scrollTrigger: {
+            trigger: mockupRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            scrub: 1,
+          },
+        });
+      }
+
+      /* --- File list items stagger on scroll --- */
+      if (fileListRef.current) {
+        const fileItems = fileListRef.current.querySelectorAll("[data-file-item]");
+        gsap.fromTo(
+          fileItems,
+          {
+            opacity: 0,
+            y: 20,
+            x: -10,
+            scale: 0.95,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            x: 0,
+            scale: 1,
+            stagger: 0.12,
+            duration: 0.6,
+            ease: "back.out(1.4)",
+            scrollTrigger: {
+              trigger: fileListRef.current,
+              start: "top 90%",
+              end: "top 60%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+    }, mockupRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="relative w-full rounded-2xl border border-white/[0.08] bg-[#0c0c14]/80 overflow-hidden shadow-2xl shadow-indigo-500/10 backdrop-blur-xl">
+    <div
+      ref={mockupRef}
+      className="relative w-full rounded-2xl border border-white/[0.08] bg-[#0c0c14]/80 overflow-hidden shadow-2xl shadow-indigo-500/10 backdrop-blur-xl"
+      style={{ willChange: "transform" }}
+    >
       {/* Top bar */}
       <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06] bg-white/[0.02]">
         <div className="flex gap-1.5">
@@ -55,7 +152,11 @@ function PortalMockup() {
       {/* Dashboard content */}
       <div className="grid grid-cols-12 gap-0 min-h-[320px]">
         {/* Sidebar */}
-        <div className="col-span-3 border-r border-white/[0.06] p-3 space-y-1">
+        <div
+          ref={sidebarRef}
+          className="col-span-3 border-r border-white/[0.06] p-3 space-y-1"
+          style={{ willChange: "transform" }}
+        >
           <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/15">
             <div className="w-5 h-5 rounded-md bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center">
               <span className="text-[9px] font-bold text-white">A</span>
@@ -89,7 +190,11 @@ function PortalMockup() {
         </div>
 
         {/* Main content */}
-        <div className="col-span-9 p-4">
+        <div
+          ref={contentRef}
+          className="col-span-9 p-4"
+          style={{ willChange: "transform" }}
+        >
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -121,10 +226,11 @@ function PortalMockup() {
           </div>
 
           {/* File list */}
-          <div className="space-y-1.5 mb-4">
+          <div ref={fileListRef} className="space-y-1.5 mb-4">
             {recentFiles.map((file, i) => (
               <motion.div
                 key={file.name}
+                data-file-item
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 + i * 0.12, type: "spring", stiffness: 200 }}
