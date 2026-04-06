@@ -19,6 +19,7 @@ export const metadata: Metadata = {
     "file sharing",
     "client communication",
   ],
+  robots: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
   alternates: {
     canonical: 'https://clientportal.eazyweb.nc',
   },
@@ -44,40 +45,62 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "ClientPortal",
-  applicationCategory: "BusinessApplication",
-  description:
-    "Premium client portal builder for freelancers and agencies. Share files, messages, and project updates with your clients.",
-  url: "https://clientportal.eazyweb.nc",
-  offers: [
+  "@graph": [
     {
-      "@type": "Offer",
-      name: "Starter",
-      price: "19",
-      priceCurrency: "USD",
-      billingIncrement: "P1M",
+      "@type": "WebSite",
+      name: "ClientPortal",
+      url: "https://clientportal.eazyweb.nc",
+      publisher: {
+        "@type": "Organization",
+        name: "EazyWebNC",
+        url: "https://eazyweb.nc",
+        logo: { "@type": "ImageObject", url: "https://eazyweb.nc/logo.png" },
+      },
     },
     {
-      "@type": "Offer",
-      name: "Pro",
-      price: "49",
-      priceCurrency: "USD",
-      billingIncrement: "P1M",
+      "@type": "SoftwareApplication",
+      name: "ClientPortal",
+      applicationCategory: "BusinessApplication",
+      description:
+        "Premium client portal builder for freelancers and agencies. Share files, messages, and project updates with your clients.",
+      url: "https://clientportal.eazyweb.nc",
+      offers: [
+        { "@type": "Offer", name: "Starter", price: "19", priceCurrency: "USD", billingIncrement: "P1M" },
+        { "@type": "Offer", name: "Pro", price: "49", priceCurrency: "USD", billingIncrement: "P1M" },
+        { "@type": "Offer", name: "Agency", price: "99", priceCurrency: "USD", billingIncrement: "P1M" },
+      ],
+      creator: { "@type": "Organization", name: "EazyWebNC", url: "https://eazyweb.nc" },
     },
     {
-      "@type": "Offer",
-      name: "Agency",
-      price: "99",
-      priceCurrency: "USD",
-      billingIncrement: "P1M",
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "What is ClientPortal?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "ClientPortal is a branded client portal builder for freelancers and agencies. Share files, messages, and project updates with your clients in a premium, white-labeled experience.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Can I customize the portal with my brand?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes! ClientPortal lets you add your logo, brand colors, and custom domain so your clients see a fully branded experience that matches your business.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "What can I share through the client portal?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "You can share files, project updates, messages, invoices, and deliverables. Everything your client needs is organized in one secure, professional space.",
+          },
+        },
+      ],
     },
   ],
-  creator: {
-    "@type": "Organization",
-    name: "EazyWebNC",
-    url: "https://eazyweb.nc",
-  },
 };
 
 export default function RootLayout({
